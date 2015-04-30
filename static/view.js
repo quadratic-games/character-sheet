@@ -1,5 +1,3 @@
-"use strict";
-
 var App = new Marionette.Application();
 
 App.addRegions({
@@ -73,11 +71,6 @@ App.StatsView = Marionette.CompositeView.extend({
             }));
         }
     }
-});
-
-var Stat = Backbone.Model.extend({});
-var Stats = Backbone.Collection.extend({
-    model:Stat
 });
 
 App.on("start", function() {
