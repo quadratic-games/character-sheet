@@ -1,5 +1,35 @@
 {% extends "base.html" %}
 
 {% block body %}
-<p>Maybe this works?</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <h5>Welcome, <b><a href="/user/{{username}}">{{username}}</a></b></h5>
+            <hr>
+        </div> 
+    </div> 
+    <div class="row">
+        <div class="col-md-6">
+            <h2><a href="/charactersheets">Character Sheets</a></h2>
+            <hr>
+            <p>Some column</p>
+            <hr>
+            <p>Iterate through list of sheets here</p>
+            <hr>
+            <p>So characters show up</p>
+            <hr>
+            <p><b>Altha</b>, level 5 Sorcerer</p>
+            <hr>
+            <p>Etc</p>
+        </div>
+        <div class="col-md-6">
+            <h2><a href="/campaigns">Campaigns</a></h2>
+            <hr>
+            <p>Some other column</p>
+            <hr>
+            <p>Iterate through list of campaigns here</p>
+            <hr>
+        </div>
+    </div>
+</div>
 {% endblock body %}
