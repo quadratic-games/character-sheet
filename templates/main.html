@@ -4,8 +4,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-right">
-            <h5>Welcome, <b><a href="/user/{{username}}">{{username}}</a></b></h5>
-            <hr>
+        {% if not session.username %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        {% else %}
+            <h5>Welcome, <b><a href="/user/{{session.username}}">{{session.username}}</a></b></h5>
+        {% endif %}
         </div> 
     </div> 
     <div class="row">
