@@ -17,9 +17,7 @@ var Character = Backbone.Model.extend({
                 "cha": 16
             },
             "modifiers": {
-                "str": function() {
-                    return (this.get("stats")["abilities"]["str"] - 10) / 2;
-                }
+                "str": -1
             }
         },
         "actions": {
@@ -47,6 +45,14 @@ App.on("start", function() {
     console.log("App started");
 
     var char1 = new Character();
+    
+    char1.on("change:stats", function() {
+        var newStats = _.clone(this.get("stats"));
+        newStats.modifiers.str = (newStats.abilities.str - 10) / 2;
+
+        this.set("stats", newStats);
+    });
+
     var characterView = new App.CharacterView({model:char1});
     App.charRegion.show(characterView);
 
