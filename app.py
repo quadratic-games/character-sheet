@@ -49,7 +49,7 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         pw = request.form["password"]
-        valid = auth(user,pw)
+        valid = auth(username,pw)
         if valid:
             session["username"] = username
             flash("You are successfully logged in.")
@@ -77,7 +77,8 @@ def register():
             error = "Please enter a valid username and password."
     if(error):
         flash(error)
-    return render_template("register.html")
+        return render_template("register.html")
+    return render_template("login.html")
 
 @app.route("/user/<username>")
 @requires_auth
@@ -85,7 +86,7 @@ def profile(username=None):
     if "username" not in session:
         flash("You must login to access this page.")
         return redirect(url_for("login"))
-    user = users.findone({"username":session["username"]})
+    user = users.find_one({"username":session["username"]})
     if user != None:
         return render_template("profile.html",user=user)
     else:
@@ -98,7 +99,7 @@ def settings(username=None):
     if "username" not in session:
         flash("You must login to access this page.")
         return redirect(url_for("login"))
-    user = users.findone({"username":session["username"]})
+    user = users.find_one({"username":session["username"]})
     error = ""
     if request.method == "POST":
         #change settings
