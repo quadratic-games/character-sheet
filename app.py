@@ -81,12 +81,8 @@ def register():
     return render_template("login.html")
 
 @app.route("/user/<username>")
-@requires_auth
 def profile(username=None):
-    if "username" not in session:
-        flash("You must login to access this page.")
-        return redirect(url_for("login"))
-    user = users.find_one({"username":session["username"]})
+    user = users.find_one({"username":username})
     if user != None:
         return render_template("profile.html",user=user)
     else:
