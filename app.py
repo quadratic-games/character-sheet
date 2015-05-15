@@ -25,12 +25,15 @@ def requires_auth(f):
 
 def create_user(user, pw):
     new = { 'username': user, 'password': pw }
-    try:
+    success = username_free(user)
+    if success:
         user_id = users.insert(new)
         print user_id
-        return "User successfully created."
-    except:
-        return "Username already in database."
+    return success
+
+#return True if username is not in use
+def username_free(username):
+    return users.find_one({"username":username}) == None
 
 ################# Routing & Pages #####################
 
@@ -66,19 +69,24 @@ def logout():
 
 @app.route('/register', methods=["GET","POST"])
 def register():
-    error = ""
+    reg = ""
     if request.method == "POST":
         user = request.form['username']
         pw = request.form['password']
         pw2 = request.form['confirm_password']
         if (user != "" or pw != "" or pw2 != "") and pw == pw2:
-            error = create_user(user,pw)
+            reg = create_user(user,pw)
+            if reg:
+                flash("Success! You may now log in.")
+                return redirect(url_for('login'))
+            else:
+                flash("Sorry, username already registered.")
+                return redirect(url_for('register'))
         else:
-            error = "Please enter a valid username and password."
-    if(error):
-        flash(error)
+            flash("Please enter a valid username and password.")
+            return redirect(url_for('register'))
+    else:
         return render_template("register.html")
-    return render_template("login.html")
 
 @app.route("/user/<username>")
 def profile(username=None):
