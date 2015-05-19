@@ -4,7 +4,12 @@ from functools import wraps
 import config
 
 app = Flask(__name__)
-client = MongoClient("mongodb://admin:alpine@ds061671.mongolab.com:61671/character-sheets")
+"""
+Local DB:
+#steps
+"""
+client = MongoClient()
+#client = MongoClient("mongodb://admin:alpine@ds061671.mongolab.com:61671/character-sheets")
 db = client["character-sheets"]
 users = db["users"]
 
@@ -37,11 +42,11 @@ def username_free(username):
 
 ################# Routing & Pages #####################
 
-@app.route("/")
+@app.route("/main")
 def index():
     return render_template("index.html")
 
-@app.route("/main")
+@app.route("/")
 def main():
     username = "wally"
     return render_template("main.html",username=username)
@@ -97,6 +102,7 @@ def profile(username=None):
         flash("User not found.")
         return redirect(url_for("index"))
 
+#TODO: Have separate function to clean profile info
 @app.route("/settings",methods=["GET","POST"])
 @requires_auth
 def settings(username=None):
