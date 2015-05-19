@@ -12,6 +12,13 @@
         {% endif %}
         </div> 
     </div> 
+    {% if not session.username %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 text-center">
+            <h2>Welcome to Quadratic Games' Character Sheets App!</h2>
+        </div>
+    </div>
+    {% else %}
     <div class="row">
         <div class="col-md-6">
             <h2><a href="/charactersheets">Character Sheets</a></h2>
@@ -35,5 +42,6 @@
             <hr>
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock body %}
