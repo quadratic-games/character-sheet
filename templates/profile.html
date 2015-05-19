@@ -6,8 +6,9 @@
         <div class="col-md-12">
         {% if session.username %}
             <h3>Welcome, {{session.username}}</h3>
-        {% endif %}
+        {% else %}
             <h3>{{user.username}}</h3>
+        {% endif %}
             <p><b>Location</b>: {{user.location}}</p>
             <p><b>About</b>: {{user.about}}</p>
             <hr>

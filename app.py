@@ -47,6 +47,7 @@ def index():
     return render_template("index.html")
 
 @app.route("/")
+@app.route("/index")
 def main():
     username = "wally"
     return render_template("main.html",username=username)
@@ -67,6 +68,7 @@ def login():
     return render_template("login.html",error=error)
 
 @app.route('/logout')
+@requires_auth
 def logout():
     print session['username']
     session.pop('username', None)
@@ -99,8 +101,9 @@ def profile(username=None):
     if user != None:
         return render_template("profile.html",user=user)
     else:
+        print "User not found."
         flash("User not found.")
-        return redirect(url_for("index"))
+        return redirect(url_for('index'))
 
 #TODO: Have separate function to clean profile info
 @app.route("/settings",methods=["GET","POST"])
