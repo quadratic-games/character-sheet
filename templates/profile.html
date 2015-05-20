@@ -3,9 +3,9 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8 col-md-offset-2">
         {% if session.username %}
-            <h3>Welcome, {{session.username}}</h3>
+            <h3>Profile</h3>
         {% else %}
             <h3>{{user.username}}</h3>
         {% endif %}

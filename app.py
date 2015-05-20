@@ -49,8 +49,7 @@ def index():
 @app.route("/")
 @app.route("/index")
 def main():
-    username = "wally"
-    return render_template("main.html",username=username)
+    return render_template("main.html")
 
 @app.route("/login",methods=["GET","POST"])
 def login():
@@ -61,11 +60,11 @@ def login():
         valid = auth(username,pw)
         if valid:
             session["username"] = username
-            flash("You are successfully logged in.")
-            return redirect(url_for("profile",username=username))
+            flash("Successfully logged in.")
+            return redirect(url_for("index"))
         else:
-            error = "Username/password invalid."
-    return render_template("login.html",error=error)
+            flash("Username/password invalid.")
+    return render_template("login.html")
 
 @app.route('/logout')
 @requires_auth
@@ -101,7 +100,6 @@ def profile(username=None):
     if user != None:
         return render_template("profile.html",user=user)
     else:
-        print "User not found."
         flash("User not found.")
         return redirect(url_for('index'))
 
