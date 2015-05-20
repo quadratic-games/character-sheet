@@ -9,25 +9,29 @@
     <script src="../static/bootstrap.min.js"></script>
     <script src="../static/app.js"></script>
     
+    <style>
+      div.container{
+      padding-top: 15px;
+      }
+    </style>
  
 </head>
 <body>
     <div class="container">
       <div class="row">
       <div class="col-md-12">
-      {% with messages = get_flashed_messages() %}
-          {% if messages %}
-          <div class="panel panel-info">
-              <div class="panel-heading"></div>
-              <div class="panel-body">
-              {% for message in messages %}
-              {{ message }}
-              <br/>
+	{% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="panel panel-info">
+          <div class="panel-heading"></div>
+          <div class="panel-body">
+            {% for message in messages %}
+            {{ message }}
               {% endfor %}
-              </div>
           </div>
+        </div>
           {% endif %}
-      {% endwith %}
+	{% endwith %}
       </div>
       </div>
     </div>
