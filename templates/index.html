@@ -7,7 +7,9 @@
     <script src="/static/lib/backbone.marionette.js"></script>
 
     <script id="stat-template" type="text/template">
-      <p>name: <%= name %></p><p>value: <%= value %></p>
+      <p>name: <%= name %></p>
+      <p>value: <%= value %></p>
+      <p>change? <input type="text"> <button>change!</button></p>
     </script>
     
     <script id="statset-template" type="text/template">
@@ -26,7 +28,12 @@
   <body>
     <h1>Dice Roller</h1>
 
-    <div id="char-region"> </div>
+    <h2>Stat Region</h2>
+    <div id="stat-region"> </div>
+    <h2>StatSet Region</h2>
+    <div id="statset-region"> </div>
+    <h2>Character Region</h2>
+    <div id="character-region"> </div>
     <script src="/static/app.js"></script>
   </body>
 </html>

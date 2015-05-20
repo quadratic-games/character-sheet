@@ -13,7 +13,7 @@ var StatSet = Backbone.Collection.extend({
     model: Stat
 });
 
-var Character = Backbone.Collection.extend({
+var Character = Backbone.Model.extend({
     model: StatSet
     // stats: {
 
@@ -33,7 +33,7 @@ var Character = Backbone.Collection.extend({
     //             "cha": 16
     //         },
     //         "modifiers": {
-    //             "str": -1
+    //             "str": -1nn
     //         }
     //     },
     //     "actions": {
@@ -46,10 +46,6 @@ var Character = Backbone.Collection.extend({
 
 // VIEW STUFF
 
-App.addRegions({
-    charRegion:"#char-region"
-});
-
 var StatView = Marionette.ItemView.extend({
     template: "#stat-template",
     model: Stat
@@ -57,46 +53,55 @@ var StatView = Marionette.ItemView.extend({
 
 var StatSetView = Marionette.CompositeView.extend({
     template: "#statset-template",
+    collection: StatSet,
     childView: StatView,
-    childViewContainer: "#stats",
+    childViewContainer: "#stats"
 });
 
 var CharacterView = Marionette.CompositeView.extend({
     template: "#char-template",
+    // collection: Character,
     childView: StatSetView,
     childViewContainer: "#statsets"
+});
+
+App.addRegions({
+    statRegion: "#stat-region",
+    statsetRegion: "#statset-region",
+    characterRegion: "#character-region"
 });
 
 App.on("start", function() {
     console.log("App started");
 
-    // var statSet = new StatSet([
-    //     new Stat({name: "strength", value: 10}),
-    //     new Stat({name: "wisdom", value: 8})
-    // ]);
+    var stat = new Stat(
+        {name: "strength", value: 10}
+    );
+    var statView = new StatView({model:stat});
+    App.statRegion.show(statView);
+    
+    var statSet = new StatSet([
+        new Stat({name: "dexterity", value: 11}),
+        new Stat({name: "intelligence", value: 12}),
+    ]);
+    
+    var statSetView = new StatSetView({collection:statSet});
+    App.statsetRegion.show(statSetView);
+
     var char1 = new Character([
         new StatSet([
-            new Stat({name: "strength", value: 10}),
-            new Stat({name: "wisdom", value: 8})
+            new Stat({name: "wisdom", value: 13}),
+            new Stat({name: "charisma", value: 14})
         ]),
         new StatSet([
-            new Stat({name: "strength modifier", value: 0}),
-            new Stat({name: "wisdom modifier", value: -1})
+            new Stat({name: "wisdom modifier", value: 1}),
+            new Stat({name: "charisma modifier", value: 2})
         ])
     ]);
-    // char1.on("change:stats", function() {
-    //     var newStats = _.clone(this.get("stats"));
-    //     newStats.modifiers.str = (newStats.abilities.str - 10) / 2;
-
-    //     this.set("stats", newStats);
-    // });
-
-    // var statSetView = new StatSetView({collection:statSet});
-    // App.charRegion.show(statSetView);
 
     var characterView = new CharacterView({collection:char1});
-    App.charRegion.show(characterView);
-    
+    App.characterRegion.show(characterView);
+
     Backbone.history.start();
 });
 
