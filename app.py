@@ -103,7 +103,6 @@ def profile(username=None):
         flash("User not found.")
         return redirect(url_for('index'))
 
-#TODO: Have separate function to clean profile info
 @app.route("/settings",methods=["GET","POST"])
 @requires_auth
 def settings(username=None):
