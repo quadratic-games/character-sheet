@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Character Sheets</title>
+    <link rel="stylesheet" href="../static/bootstrap.min.css" type="text/css"/>
+    <script src="/static/lib/jquery.js"></script>
+    <script src="/static/lib/lodash.js"></script>
+    <script src="/static/lib/backbone.js"></script>
+    <script src="/static/lib/backbone.marionette.js"></script>
+    <script src="../static/bootstrap.min.js"></script>
+    <!--<script src="../static/app.js"></script>-->
+     
+    {% block templates %}
+    {% endblock templates %} 
+    
+    <style>
+      a{
+        color:red;
+      }
+      a:hover{
+        text-decoration:none;
+        color:#bb0000;
+      }
+      div#header{
+        padding-top: 15px;
+      }
+      div#logo{
+      }
+    </style>
+ 
+</head>
+<body>
+    <div class="container">
+        <div class="row" id="header">
+        {% block header %}
+        <div class="col-md-6" id="logo">
+            <h4><a href="/">QG</a></h4>
+        </div>
+        <div class="col-md-6 text-right">
+        {% if not session.username %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        {% else %}
+            <h5>Welcome, <b><a href="/user/{{session.username}}">{{session.username}}</a></b></h5>
+        {% endif %}
+        </div> 
+      {% endblock header %}
+      </div>
+    </div>
+    <div class="row">
+          <div class="col-md-6 col-md-offset-3">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="panel panel-default">
+              <div class="panel-heading"></div>
+              <div class="panel-body">
+                {% for message in messages %}
+                {{ message }}
+                  {% endfor %}
+              </div>
+            </div>
+              {% endif %}
+        {% endwith %}
+          </div>
+      </div>
+    {% block body %}
+    <p>this is a test</p>
+    {% endblock body %} 
+</body>
+</html>

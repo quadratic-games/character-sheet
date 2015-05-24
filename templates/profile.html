@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+        {% if session.username %}
+            <h3>Profile</h3>
+        {% else %}
+            <h3>{{user.username}}</h3>
+        {% endif %}
+            <p><b>Location</b>: {{user.location}}</p>
+            <p><b>About</b>: {{user.about}}</p>
+            <hr>
+            <p><a href="/settings">Settings</a></p>
+            <p><a href="/logout">Logout</a></p>
+        </div>
+    </div>
+</div>
+{% endblock body %}

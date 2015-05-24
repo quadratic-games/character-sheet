@@ -1,4 +1,3 @@
-
 var App = new Marionette.Application();
 
 // DATA STUFF
@@ -17,22 +16,23 @@ var Character = Backbone.Collection.extend({
     initialize: function () {
         this.addStat("Name", "Enter your name!", [], function (){}); 
         this.addStat("Level", 0, [], function (){});
+        
         ["Strength", "Dexterity", "Constitution",
          "Intelligence", "Wisdom", "Charisma"]
             .forEach(function (statName, index, array) {
                 this.addStat(statName, 10, [],
-                             function(){});
+                            function(){});
                 this.addStat(statName + " mod.", 0, [statName],
-                             function (statVal) {
-                                 return Math.floor(
-                                     (statVal - 10)
-                                         / 2);
-                             });
+                            function (statVal) {
+                                return Math.floor(
+                                    (statVal - 10)
+                                        / 2);
+                            });
             }, this);
         this.addStat("BAB", 0, ["Level"],
-                     function (level) {
-                         return level - 1;
-                     });
+                    function (level) {
+                        return level - 1;
+                    });
         this.addStat("Melee AB", 0, ["BAB", "Strength mod."],
                      function (bab, strmod) {
                          return bab + strmod;
@@ -43,38 +43,29 @@ var Character = Backbone.Collection.extend({
                      });
     },
     addStat: function (statName, statVal, listenTos,
-                       generator) {
-        var mutability = listenTos.length === 0;
-        var stat = new Stat({
-            id: statName,
-            name: statName,
-            value: statVal,
-            mutable: mutability
-        });
-        this.add(stat);
+                     generator) {
+         var mutability = listenTos.length === 0;
+         var stat = new Stat({
+             id: statName,
+             name: statName,
+             value: statVal,
+             mutable: mutability
+         });
+         this.add(stat);
 
-        var collection = this;
-        listenTos.forEach(function (val, index, array) {
-            stat.listenTo(collection.get(val), "change", function () {
-                stat.set("value",
-                         generator.apply(this,
-                                         array.map(function (val) {
-                                             return collection
-                                                 .get(val)
-                                                 .get("value");
-                                         })));
-            });
-        });
-        // modifierCallback: function (statName) {
-        //     return function () {
-        //         this.get(statName + " mod.")
-        //             .set("value",
-        //                  Math.floor((this.get(statName)
-        //                              .get("value") - 10)
-        //                             / 2));
-        //     };
-        // }
-    }
+         var collection = this;
+         listenTos.forEach(function (val, index, array) {
+             stat.listenTo(collection.get(val), "change", function () {
+                 stat.set("value",
+                     generator.apply(this,
+                         array.map(function (val) {
+                             return collection
+                             .get(val)
+                             .get("value");
+                         })));
+             });
+         });
+     }
 });
 
 // VIEW STUFF
@@ -88,7 +79,7 @@ var StatView = Marionette.ItemView.extend({
     },
     ui: {
         value: "#value",
-        update: "#update"
+    update: "#update"
     },
     events: {
         "click @ui.update": function () {
@@ -116,9 +107,9 @@ App.addRegions({
 
 App.on("start", function() {
     console.log("App started");
-    
+
     var character = new Character();
-    
+
     var characterView = new CharacterView({collection:character});
     App.characterRegion.show(characterView);
 
@@ -126,3 +117,4 @@ App.on("start", function() {
 });
 
 App.start();
+
