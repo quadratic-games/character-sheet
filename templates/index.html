@@ -6,66 +6,40 @@
     <script src="/static/lib/backbone.js"></script>
     <script src="/static/lib/backbone.marionette.js"></script>
 
-    <script id="stats-template" type="text/template">
-      <table border="1">
-        <thead>
-          <tr><th>
-              Use?
-            </th><th>
-              Name
-            </th><th>
-              Value
-            </th><th>
-              <button id="add">Add</button>
-        </th></tr> </thead>
-        <tbody id="stats">
-      </tbody> </table>
-      
-      <p>
-        <input id="dice-quantity" type="text" size="1">
-        d
-        <input id="dice-value" type="text" size="1">
-        +
-        <input id="bonus" type="text" size="1">
-        <button id="roll">Roll!</button>
-      </p>
-      <p> <table border="1"> <thead> <tr>
-              <th>
-                Roll
-              </th><th>
-                Modifiers
-              </th><th>
-                Total
-              </th>
-          </tr> </thead>
-          <td id="raw"> </td>
-          <td id="modifier"> </td>
-          <td id="total"> </td>
-      </table> </p>
-    </script>
-
     <script id="stat-template" type="text/template">
-      <td><input id="checked" type="checkbox"> </td>
-
-      <td id="name" contentEditable="true"><%= name %></td>
-      <td id="value" contentEditable="true"><%= value %></td>
-
-      <!--
-          <td id="name"><%= name %></td>
-      <td id="value"><%= value %></td>
-      -->
-      <td><button id="update">update</button></td>
-      <td><button id="delete">delete</button></td>
+      <td align="left">
+        <% if (mutable) { %> 
+        <%= name %>
+        <% } else { %>
+        <b><%= name %></b>
+        <% } %>
+      </td>
+      <td align="right">
+        <% if (mutable) { %> 
+        <%= value %>
+        <% } else { %>
+        <b><%= value %></b>
+        <% } %>
+      </td>
+      <% if (mutable) { %> 
+      <td><input id="value" type="text" size="1"></td>
+      <td><button id="update">change!</button></td>
+      <% } %>
     </script>
     
-    <title>Dice Roller</title>
+    <script id="character-template" type="text/template">
+      <table>
+        <tbody id="stats">
+        </tbody>
+      </table>
+    </script>
+    
+    <title>Character Sheet!</title>
     
   </head>
   <body>
-    <h1>Dice Roller</h1>
-
-    <div id="stat-region"> </div>
-    <script src="/static/character.js"></script>
-    <script src="/static/view.js"></script>
+    <h1>Character Sheet!</h1>
+    <div id="character-region"> </div>
+    <script src="/static/app.js"></script>
   </body>
 </html>
