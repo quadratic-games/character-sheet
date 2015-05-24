@@ -15,33 +15,64 @@ var Stat = Backbone.Model.extend({
 var Character = Backbone.Collection.extend({
     model: Stat,
     initialize: function () {
-        this.makeAbility("strength");
-        this.makeAbility("dexterity");
-        this.makeAbility("constitution");
-        this.makeAbility("intelligence");
-        this.makeAbility("wisdom");
-        this.makeAbility("charisma");
+        this.addStat("Name", "Enter your name!", [],
+                     function (){});
+        this.addStat("Level", 0, [],
+                     function (){});
+        ["Strength", "Dexterity", "Constitution",
+         "Intelligence", "Wisdom", "Charisma"]
+            .forEach(function (statName, index, array) {
+                this.addStat(statName, 10, [],
+                             function(){});
+                this.addStat(statName + " mod.", 0, [statName],
+                             function (statVal) {
+                                 return Math.floor(
+                                     (statVal - 10)
+                                         / 2);
+                             });
+            }, this);
+        this.addStat("BAB", 0, ["Level"],
+                     function (level) {
+                         return level - 1;
+                     });
+        this.addStat("Melee AB", 0, ["BAB", "Strength mod."],
+                     function (bab, strmod) {
+                         return bab + strmod;
+                     });
     },
-    makeAbility: function (statName) {
-        this.add(new Stat({
+    addStat: function (statName, statVal, listenTos,
+                       generator) {
+        var mutability = listenTos.length === 0;
+        var stat = new Stat({
             id: statName,
             name: statName,
-            value: 10,
-            mutable: true
-        }));
-        console.log(this.get(statName));
-        this.add(new Stat({
-            id: statName + " mod.",
-            name: statName + " mod.",
-            value: 0,
-            mutable: false
-        }));
-        this.on("change", function () {
-                this.get(statName + " mod.")
-                .set("value",
-                     Math.floor((this.get(statName).get("value") - 10)
-                                / 2))});
-}
+            value: statVal,
+            mutable: mutability
+        });
+        this.add(stat);
+
+        var collection = this;
+        listenTos.forEach(function (val, index, array) {
+            stat.listenTo(collection.get(val), "change", function () {
+                stat.set("value",
+                         generator.apply(this,
+                                         array.map(function (val) {
+                                             return collection
+                                                 .get(val)
+                                                 .get("value");
+                                         })));
+            });
+        });
+        // modifierCallback: function (statName) {
+        //     return function () {
+        //         this.get(statName + " mod.")
+        //             .set("value",
+        //                  Math.floor((this.get(statName)
+        //                              .get("value") - 10)
+        //                             / 2));
+        //     };
+        // }
+    }
 });
 
 // VIEW STUFF
@@ -61,7 +92,10 @@ var StatView = Marionette.ItemView.extend({
         "click @ui.update": function () {
             var newval = this.ui.value.val();
             if (!isNaN(parseInt(newval))) {
-                this.model.set("value", parseInt(newval));
+                newval = parseInt(newval);
+            }
+            if (typeof(this.model.get("value")) === typeof(newval)) {
+                this.model.set("value", newval);
             }
         }
     }
