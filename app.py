@@ -46,10 +46,9 @@ def username_free(username):
 def index():
     return render_template("index.html")
 
-@app.route("/main")
-@app.route("/index")
-def main():
-    return render_template("main.html")
+@app.route("/char")
+def char():
+    return render_template("character.html")
 
 @app.route("/login",methods=["GET","POST"])
 def login():
