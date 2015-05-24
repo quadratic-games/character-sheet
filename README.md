@@ -13,8 +13,6 @@ Ivy & Tina: Front end, Backbone views, routing
 
 4/20/15 - Integrate backbone models with front end
 
-4/23/15 - Any fancy svg stuff?
-
 See forks/branches for current progress.
 
 By Harrison Chiu, Ivy Wong, and Tina Lee.
@@ -22,10 +20,16 @@ By Harrison Chiu, Ivy Wong, and Tina Lee.
 ### To Do (Frontend)
 
 - [X] Basic frontend template/look for main page
-- [ ] Character sheet page layout placeholder (to be completed after we have the backbone models/views working)
+- [X] Character sheet page layout placeholder (to be completed after we have the backbone models/views working)
 - [ ] Campaign sheet page layout placeholder
 - [X] User overview/settings
 - [X] Account setup
 - [X] Login/register pages
 - [X] Main page changes depending on logged in status
+- [ ] Iterate through user's characters and put on main page
+- [ ] Customize main page to look nicer
+- [ ] More flexible/neater table in character sheet
 
+### To Do (Backend)
+- [ ] Saving characters per user
+- [ ] Loading data from database
