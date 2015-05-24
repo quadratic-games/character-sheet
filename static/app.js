@@ -15,10 +15,8 @@ var Stat = Backbone.Model.extend({
 var Character = Backbone.Collection.extend({
     model: Stat,
     initialize: function () {
-        this.addStat("Name", "Enter your name!", [],
-                     function (){});
-        this.addStat("Level", 0, [],
-                     function (){});
+        this.addStat("Name", "Enter your name!", [], function (){}); 
+        this.addStat("Level", 0, [], function (){});
         ["Strength", "Dexterity", "Constitution",
          "Intelligence", "Wisdom", "Charisma"]
             .forEach(function (statName, index, array) {
@@ -38,6 +36,10 @@ var Character = Backbone.Collection.extend({
         this.addStat("Melee AB", 0, ["BAB", "Strength mod."],
                      function (bab, strmod) {
                          return bab + strmod;
+                     });
+        this.addStat("Ranged AB", 0, ["BAB", "Dexterity mod."],
+                     function (bab, dexmod) {
+                         return bab + dexmod;
                      });
     },
     addStat: function (statName, statVal, listenTos,
