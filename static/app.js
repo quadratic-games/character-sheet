@@ -5,9 +5,9 @@ var App = new Marionette.Application();
 var Stat = Backbone.Model.extend({
     defaults: {
         id: "undefined",
-    name: "statName",
-    value: 0,
-    mutable: true
+        name: "statName",
+        value: 0,
+        mutable: true
     }
 });
 
