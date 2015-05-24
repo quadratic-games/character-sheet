@@ -16,6 +16,30 @@
             <hr>
             <p>Some column</p>
             <hr>
+
+	    <div class = "panel-group" id = "accordion">
+	      <div class = "panel panel-default">
+		<div class = "panel-heading">
+		  <h4 class = "panel-title">
+		    <a data-toggle = "collapse" data-parent = "#accordion" href = "#collapse1">Character 1</a>
+		  </h4>
+		</div>
+		<div id = "collapse1" class = "panel-collapse collapse">
+		  <div class = "panel-body">Here are some stats</div>
+		</div>
+	      </div>
+	      <div class = "panel panel-default">
+		<div class = "panel-heading">
+		  <h4 class = "panel-title">
+		    <a data-toggle = "collapse" data-parent = "#accordion" href = "#collapse2">Character 2</a>
+		  </h4>
+		</div>
+		<div id = "collapse2" class = "panel-collapse collapse">
+		  <div class = "panel-body">Here are some more stats</div>
+		</div>
+	      </div>
+	    </div>
+
             <p>Iterate through list of sheets here</p>
             <hr>
             <p>So characters show up</p>
@@ -32,16 +56,18 @@
             <p>Iterate through list of campaigns here
 	    <button tabindex = "0" class = "btn btn-small btn-info" type = "button" data-toggle = "popover" data-trigger = "focus" title = "title" data-content = "description of campaign" data-placement = "left" style = "float: right;">Details</button> </p>
 	    <p><button class = "btn btn-primary" type = "button" data-toggle = "collapse" data-target = "#mem">Members</button>
-	    <div class = "collapse in" id = "mem" aria-expanded = "true">
-	      info on members?
+	    <div class = "collapse" id = "mem">
+	      <div>
+		info on members?
+	      </div>
 	    </div>
             <hr>
         </div>
     </div>
+ 
     <script>
       $(document).ready(function(){
       $('[data-toggle="popover"]').popover(); 
-      $('.collapse').collapse()
       });
     </script>
     {% endif %}
