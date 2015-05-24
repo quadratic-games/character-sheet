@@ -7,25 +7,26 @@
     <script src="/static/lib/backbone.marionette.js"></script>
 
     <script id="stat-template" type="text/template">
-      <p>name: <%= name %></p>
-      <p>value: <%= value %></p>
-      <p>change? <input type="text"> <button>change!</button></p>
+      <th align="left"><%= name %></th>
+      <td align="right"><%= value %></td>
+      <% if (mutable) { %> 
+      <td><input id="value" type="text" size="1"></td>
+      <td><button id="update">change!</button></td>
+      <% } %>
     </script>
     
     <script id="character-template" type="text/template">
-      <div id="stats">
-      </div>
+      <table border="1">
+        <tbody id="stats">
+        </tbody>
+      </table>
     </script>
     
-    <title>Dice Roller</title>
+    <title>Character Sheet!</title>
     
   </head>
   <body>
-    <h1>Dice Roller</h1>
-
-    <h2>Stat Region</h2>
-    <div id="stat-region"> </div>
-    <h2>Character Region</h2>
+    <h1>Character Sheet!</h1>
     <div id="character-region"> </div>
     <script src="/static/app.js"></script>
   </body>
