@@ -4,52 +4,58 @@ var App = new Marionette.Application();
 
 var Stat = Backbone.Model.extend({
     defaults: {
-        id: "undefined",
-        name: "statName",
+        id: "Undefined",
+        name: "Statname",
         value: 0,
-        mutable: true
+        mutable: true,
+        category: "Misc"
     }
 });
 
 var Character = Backbone.Collection.extend({
     model: Stat,
+    categories: ["Character", "Abilities", "Modifiers", "Combat", "Misc"],
+    comparator: function (model) {
+        return this.categories.indexOf(model.get("category"));
+    },
     initialize: function () {
-        this.addStat("Name", "Enter your name!", [], function (){}); 
-        this.addStat("Level", 0, [], function (){});
+        this.addStat("Character", "Name", "Enter your name!", [], function (){});
+        this.addStat("Character", "Level", 0, [], function (){});
         
         ["Strength", "Dexterity", "Constitution",
          "Intelligence", "Wisdom", "Charisma"]
             .forEach(function (statName, index, array) {
-                this.addStat(statName, 10, [],
+                this.addStat("Abilities", statName, 10, [],
                             function(){});
-                this.addStat(statName + " mod.", 0, [statName],
+                this.addStat("Modifiers", statName + " mod.", 0, [statName],
                             function (statVal) {
                                 return Math.floor(
                                     (statVal - 10)
                                         / 2);
                             });
             }, this);
-        this.addStat("BAB", 0, ["Level"],
+        this.addStat("Combat", "Base Attack Bonus", 0, ["Level"],
                     function (level) {
                         return level - 1;
                     });
-        this.addStat("Melee AB", 0, ["BAB", "Strength mod."],
+        this.addStat("Combat", "Melee AB", 0, ["Base Attack Bonus", "Strength mod."],
                      function (bab, strmod) {
                          return bab + strmod;
                      });
-        this.addStat("Ranged AB", 0, ["BAB", "Dexterity mod."],
+        this.addStat("Combat", "Ranged AB", 0, ["Base Attack Bonus", "Dexterity mod."],
                      function (bab, dexmod) {
                          return bab + dexmod;
                      });
     },
-    addStat: function (statName, statVal, listenTos,
+    addStat: function (statCat, statName, statVal, listenTos,
                      generator) {
          var mutability = listenTos.length === 0;
          var stat = new Stat({
              id: statName,
              name: statName,
              value: statVal,
-             mutable: mutability
+             mutable: mutability,
+             category: statCat
          });
          this.add(stat);
 
@@ -65,6 +71,8 @@ var Character = Backbone.Collection.extend({
                          })));
              });
          });
+
+        this.sort();
      }
 });
 
@@ -98,7 +106,7 @@ var CharacterView = Marionette.CompositeView.extend({
     template: "#character-template",
     collection: Character,
     childView: StatView,
-    childViewContainer: "#stats"
+    childViewContainer: "tbody",
 });
 
 App.addRegions({
