@@ -29,11 +29,21 @@
             <hr>
             <p>Some other column</p>
             <hr>
-            <p>Iterate through list of campaigns here</p>
-	    <a tabindex = "0" class = "btn btn-small btn-info" role = "button" data-toggle = "popover" data-trigger = "focus" title = "title" data-content = "info on campaign">Details</a>
+            <p>Iterate through list of campaigns here
+	    <button tabindex = "0" class = "btn btn-small btn-info" type = "button" data-toggle = "popover" data-trigger = "focus" title = "title" data-content = "description of campaign" data-placement = "left" style = "float: right;">Details</button> </p>
+	    <p><button class = "btn btn-primary" type = "button" data-toggle = "collapse" data-target = "#mem">Members</button>
+	    <div class = "collapse in" id = "mem" aria-expanded = "true">
+	      info on members?
+	    </div>
             <hr>
         </div>
     </div>
+    <script>
+      $(document).ready(function(){
+      $('[data-toggle="popover"]').popover(); 
+      $('.collapse').collapse()
+      });
+    </script>
     {% endif %}
 </div>
 {% endblock body %}
