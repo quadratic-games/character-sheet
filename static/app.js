@@ -28,92 +28,96 @@ var Character = Backbone.Collection.extend({
         return this.categories.indexOf(model.get("category"));
     },
     initialize: function () {
-        this.addStat("Character", "Name", "Enter your name!", [], function (){});
-        this.addStat("Character", "Experience", 0, [], function(){});
-        this.addStat("Character", "Exp. Track", "Medium", [], function(){});
-                     this.addStat("Character", "Level", 0, ["Experience", "Exp. Track"],
-                                  function (exp, track)  {
-                                      for (var index = 0; index < levels[track].length; index++) {
-                                          if (exp <= levels[track][index]) {
-                                              return index + 1;
-                                          }
-                                      }
-                                      return levels[track].length;
-                                  });
-        this.addStat("Character", "Size", "Medium", [], function(){});
-        this.addStat("Modifiers", "Size mod.", 0, ["Size"],
+        this.addStat("Character", "Name", [], function (){return "Enter your name!";});
+        this.addStat("Character", "Experience", [], function(){return 0;});
+        this.addStat("Character", "Exp. Track", [], function(){return "Medium";});
+        this.addStat("Character", "Level", ["Experience", "Exp. Track"],
+                     function (exp, track)  {
+                         for (var index = 0; index < levels[track].length; index++) {
+                             if (exp <= levels[track][index]) {
+                                 return index + 1;
+                             }
+                         }
+                         return levels[track].length;
+                     });
+        this.addStat("Character", "Size", [], function(){return "Medium";});
+        this.addStat("Modifiers", "Size mod.", ["Size"],
                      function(size){
-                         var sizeIndex = this.sizes.indexOf(size) - 4;
+                         var sizeIndex = sizes.indexOf(size) - 4;
                          return Math.sign(sizeIndex) * Math.pow(2, Math.abs(sizeIndex));
                      });
-        this.addStat("Character", "Race", "Human", [], function(){});
-        this.addStat("Character", "Class", "Sorceror", [], function(){});
+        this.addStat("Character", "Race", [], function(){return "Human";});
+        this.addStat("Character", "Class", [], function(){return "Fighter";});
         
         ["Strength", "Dexterity", "Constitution",
          "Intelligence", "Wisdom", "Charisma"]
             .forEach(function (statName, index, array) {
-                this.addStat("Abilities", statName, 10, [],
-                            function(){});
-                this.addStat("Modifiers", statName + " mod.", 0, [statName],
+                this.addStat("Abilities", statName, [],
+                            function(){return 10;});
+                this.addStat("Modifiers", statName + " mod.", [statName],
                             function (statVal) {
                                 return Math.floor(
                                     (statVal - 10)
                                         / 2);
                             });
             }, this);
-        this.addStat("Combat", "Base Attack Bonus", 0, ["Level"],
+        this.addStat("Combat", "Base Attack Bonus", ["Level"],
                      function (level) {
                          return level - 1;
                      });
-        this.addStat("Combat", "Melee AB", 0, ["Base Attack Bonus", "Strength mod."],
+        this.addStat("Combat", "Melee AB", ["Base Attack Bonus", "Strength mod."],
                      function (bab, strmod) {
                          return bab + strmod;
                      });
-        this.addStat("Combat", "Ranged AB", 0, ["Base Attack Bonus", "Dexterity mod."],
+        this.addStat("Combat", "Ranged AB", ["Base Attack Bonus", "Dexterity mod."],
                      function (bab, dexmod) {
                          return bab + dexmod;
                      });
-        this.addStat("Combat", "Combat Maneuver Bonus", 0, ["Base Attack Bonus", "Size mod.",
+        this.addStat("Combat", "Combat Maneuver Bonus", ["Base Attack Bonus", "Size mod.",
                                                             "Strength mod."],
                     function (bab, sizemod, strmod) {
                         return bab - sizemod + strmod;
                     });
-        this.addStat("Combat", "Combat Maneuver Defense", 0, ["Base Attack Bonus", "Size mod.",
+        this.addStat("Combat", "Combat Maneuver Defense", ["Base Attack Bonus", "Size mod.",
                                                             "Strength mod.", "Dexterity mod."],
                     function (bab, sizemod, strmod, dexmod) {
                         return 10 - sizemod + bab + strmod + dexmod;
                     });
-        this.addStat("Combat", "Flat-Footed", 0, ["Base Attack Bonus", "Size mod.",
+        this.addStat("Combat", "Flat-Footed", ["Base Attack Bonus", "Size mod.",
                                                  "Strength mod."],
                      function (bab, sizemod, strmod) {
                          return 10 + bab - sizemod + strmod;
                      });
-        this.addStat("Saving Throws", "Fortitude Save", 0, ["Constitution mod."],
+        this.addStat("Saving Throws", "Fortitude Save", ["Constitution mod."],
                      function(conmod) {
                          return conmod;
                      });
-        this.addStat("Saving Throws", "Reflex Save", 0, ["Dexterity mod."],
+        this.addStat("Saving Throws", "Reflex Save", ["Dexterity mod."],
                      function(dexmod) {
                          return dexmod;
                      });
-        this.addStat("Saving Throws", "Will Save", 0, ["Wisdom mod."],
+        this.addStat("Saving Throws", "Will Save", ["Wisdom mod."],
                      function(wismod) {
                          return wismod;
                      });
+        this.trigger("change");
     },
-    addStat: function (statCat, statName, statVal, listenTos,
-                     generator) {
-         var mutability = listenTos.length === 0;
-         var stat = new Stat({
-             id: statName,
-             name: statName,
-             value: statVal,
-             mutable: mutability,
-             category: statCat
+    addStat: function (statCat, statName, listenTos,
+                       generator) {
+        var mutability = listenTos.length === 0;
+        var collection = this;
+        var stat = new Stat({
+            id: statName,
+            name: statName,
+            value: generator.apply(collection,
+                                   listenTos.map(function (val) {
+                                       return collection.get(val).get("value");
+                                   })),
+            mutable: mutability,
+            category: statCat
          });
          this.add(stat);
-
-         var collection = this;
+        
          listenTos.forEach(function (val, index, array) {
              stat.listenTo(collection.get(val), "change", function () {
                  stat.set("value",
