@@ -17,21 +17,28 @@
         <% } %>
       </td>
       <% if (mutable) { %> 
-      <td><input id="value" type="text" size="1"></td>
-      <td><button id="update">change!</button></td>
+      <td><input id="value" type="text" class="form-control" size="1"></td>
+      <td><button class="btn btn-default" id="update">change!</button></td>
       <% } %>
     </script>
     
     <script id="character-template" type="text/template">
-      <table>
+      <table class="table">
         <tbody id="stats">
         </tbody>
       </table>
     </script>
+
 {% endblock templates %}
 
 {% block body %}
-    <h1>Character Sheet!</h1>
-    <div id="character-region"> </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>Character Sheet!</h1>
+            <div id="character-region"></div>
+        </div>
+    </div>
     <script src="/static/app.js"></script>
+</div>
 {% endblock body %}
