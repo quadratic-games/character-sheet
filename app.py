@@ -42,11 +42,11 @@ def username_free(username):
 
 ################# Routing & Pages #####################
 
-@app.route("/main")
+@app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/")
+@app.route("/main")
 @app.route("/index")
 def main():
     return render_template("main.html")
