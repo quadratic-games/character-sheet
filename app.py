@@ -120,6 +120,10 @@ def settings(username=None):
         flash("Changed settings.")
     return render_template("settings.html",user=user)
 
+@app.route("/server/<id>", methods=["GET", "POST", "PUT", "DELETE"])
+def server(id=None):
+    pass
+    
 if __name__ == "__main__":
     app.secret_key = config.getSecret()
     app.debug = True

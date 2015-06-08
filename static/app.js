@@ -10,10 +10,9 @@ var levels = {
     "Fast": [1300, 3300, 6000, 10000, 15000, 23000, 24000, 50000, 71000, 105000, 145000, 210000, 295000, 425000, 600000, 850000, 120000, 170000, 240000],
 };
 
-
 var Stat = Backbone.Model.extend({
     defaults: {
-        id: "Undefined",
+        id: "undefined",
         name: "Statname",
         value: 0,
         mutable: true,
@@ -23,6 +22,7 @@ var Stat = Backbone.Model.extend({
 
 var Character = Backbone.Collection.extend({
     model: Stat,
+    url: "/server",
     categories: ["Character", "Abilities", "Modifiers", "Combat", "Saving Throws", "Misc"],
     comparator: function (model) {
         return this.categories.indexOf(model.get("category"));
@@ -125,6 +125,7 @@ var Character = Backbone.Collection.extend({
                          array.map(function (val) {
                              return collection.get(val).get("value");
                          })));
+                 stat.sync("update", stat);
              });
          });
 
