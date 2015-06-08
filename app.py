@@ -113,9 +113,10 @@ def settings(username=None):
     if request.method == "POST":
         #change settings
         location = request.form['location']
+        about = request.form['about']
         db.users.update(
             { 'username': session['username'] },
-            { '$set': { 'location':location } } )
+            { '$set': { 'location':location, 'about':about } } )
         user = users.find_one({"username":session["username"]})
         flash("Changed settings.")
     return render_template("settings.html",user=user)
