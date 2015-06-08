@@ -1,5 +1,44 @@
 {% extends "base.html" %}
 
+{% block templates %}
+    <script id="stat-template" type="text/template">
+      <th><%= category %></th>
+      <td>
+        <% if (mutable) { %> 
+        <%= name %>
+        <% } else { %>
+        <b><%= name %></b>
+        <% } %>
+      </td>
+      <td>
+        <% if (mutable) { %> 
+        <%= value %>
+        <% } else { %>
+        <b><%= value %></b>
+        <% } %>
+      </td>
+      <% if (mutable) { %> 
+      <td><input id="value" type="text" class="form-control" size="1"></td>
+      <td><button class="btn btn-default" id="update">change!</button></td>
+      <% } %>
+    </script>
+    
+    <script id="character-template" type="text/template">
+      <table class="table">
+        <thead>
+          <th>Category</th>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Modify?</th>
+          <th>Confirm</th>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </script>
+
+{% endblock templates %}
+
 {% block body %}
 <div class="container">
  
@@ -70,6 +109,18 @@
       $('[data-toggle="popover"]').popover(); 
       });
     </script>
+    
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Character Sheet!</h1>
+          <div id="character-region"></div>
+        </div>
+      </div>
+      <script src="/static/app.js"></script>
+    </div>
+
     {% endif %}
 </div>
+
 {% endblock body %}
