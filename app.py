@@ -120,9 +120,18 @@ def settings(username=None):
         flash("Changed settings.")
     return render_template("settings.html",user=user)
 
-@app.route("/server/<id>", methods=["GET", "POST", "PUT", "DELETE"])
-def server(id=None):
-    pass
+@app.route("/server/<statname>", methods=["PUT"])
+def server(statname=None):
+    attributes = request.get_json()
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~HEY LOOK OVER HERE"
+    print attributes
+    print statname
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~YOU CAN STOP NOW"
+    db.users.update_one(
+        {"username": session["username"]},
+        {"$set": {statname: attributes["value"]}},
+        upsert=True)
+    return statname
     
 if __name__ == "__main__":
     app.secret_key = config.getSecret()
