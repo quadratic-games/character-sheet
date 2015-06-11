@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container">
+  <div class = "row">
+    <div class = "col-md-8 col-md-offset-2">
+      <h3>{{session.username}}'s Campaigns</h3>
+      <form method = "POST">
+	<div class = "form-group">
+	  <label for = "title">Name of campaign</label>
+	  <input type = "text" class = "form-control" id = "title" name = "title">
+	</div>
+	<button type = "submit" class = "btn btn-default">Add Campaign</button>
+      </form>
+      <hr>
+      <p><a href="/">Return</a></p>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+

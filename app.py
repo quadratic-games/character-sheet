@@ -121,6 +121,11 @@ def settings(username=None):
         flash("Changed settings.")
     return render_template("settings.html",user=user)
 
+@app.route("/campaigns", methods = ["GET","POST"])
+@requires_auth
+def campaigns():
+    return render_template("campaigns.html")
+
 if __name__ == "__main__":
     app.secret_key = config.getSecret()
     app.debug = True
