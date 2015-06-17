@@ -9,7 +9,7 @@ Local DB:
 #steps
 """
 client = MongoClient()
-#client = MongoClient("mongodb://admin:alpine@ds061671.mongolab.com:61671/character-sheets")
+# client = MongoClient("mongodb://admin:alpine@ds061671.mongolab.com:61671/character-sheets")
 db = client["character-sheets"]
 users = db["users"]
 
@@ -121,6 +121,19 @@ def settings(username=None):
         flash("Changed settings.")
     return render_template("settings.html",user=user)
 
+@app.route("/server/<statname>", methods=["PUT"])
+def server(statname=None):
+    attributes = request.get_json()
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~HEY LOOK OVER HERE"
+    print attributes
+    print statname
+    print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~YOU CAN STOP NOW"
+    db.users.update_one(
+        {"username": session["username"]},
+        {"$set": {statname: attributes["value"]}},
+        upsert=True)
+    return statname
+    
 if __name__ == "__main__":
     app.secret_key = config.getSecret()
     app.debug = True

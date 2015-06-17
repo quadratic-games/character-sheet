@@ -10,10 +10,9 @@ var levels = {
     "Fast": [1300, 3300, 6000, 10000, 15000, 23000, 24000, 50000, 71000, 105000, 145000, 210000, 295000, 425000, 600000, 850000, 120000, 170000, 240000],
 };
 
-
 var Stat = Backbone.Model.extend({
     defaults: {
-        id: "Undefined",
+        id: "undefined",
         name: "Statname",
         value: 0,
         mutable: true,
@@ -23,6 +22,7 @@ var Stat = Backbone.Model.extend({
 
 var Character = Backbone.Collection.extend({
     model: Stat,
+    url: "/server",
     categories: ["Character", "Abilities", "Modifiers", "Combat", "Saving Throws", "Misc"],
     comparator: function (model) {
         return this.categories.indexOf(model.get("category"));
@@ -41,7 +41,7 @@ var Character = Backbone.Collection.extend({
                          return levels[track].length;
                      });
         this.addStat("Character", "Size", [], function(){return "Medium";});
-        this.addStat("Modifiers", "Size mod.", ["Size"],
+        this.addStat("Modifiers", "Size mod", ["Size"],
                      function(size){
                          var sizeIndex = sizes.indexOf(size) - 4;
                          return Math.sign(sizeIndex) * Math.pow(2, Math.abs(sizeIndex));
@@ -54,7 +54,7 @@ var Character = Backbone.Collection.extend({
             .forEach(function (statName, index, array) {
                 this.addStat("Abilities", statName, [],
                             function(){return 10;});
-                this.addStat("Modifiers", statName + " mod.", [statName],
+                this.addStat("Modifiers", statName + " mod", [statName],
                             function (statVal) {
                                 return Math.floor(
                                     (statVal - 10)
@@ -65,38 +65,38 @@ var Character = Backbone.Collection.extend({
                      function (level) {
                          return level - 1;
                      });
-        this.addStat("Combat", "Melee AB", ["Base Attack Bonus", "Strength mod."],
+        this.addStat("Combat", "Melee AB", ["Base Attack Bonus", "Strength mod"],
                      function (bab, strmod) {
                          return bab + strmod;
                      });
-        this.addStat("Combat", "Ranged AB", ["Base Attack Bonus", "Dexterity mod."],
+        this.addStat("Combat", "Ranged AB", ["Base Attack Bonus", "Dexterity mod"],
                      function (bab, dexmod) {
                          return bab + dexmod;
                      });
-        this.addStat("Combat", "Combat Maneuver Bonus", ["Base Attack Bonus", "Size mod.",
-                                                            "Strength mod."],
+        this.addStat("Combat", "Combat Maneuver Bonus", ["Base Attack Bonus", "Size mod",
+                                                            "Strength mod"],
                     function (bab, sizemod, strmod) {
                         return bab - sizemod + strmod;
                     });
-        this.addStat("Combat", "Combat Maneuver Defense", ["Base Attack Bonus", "Size mod.",
-                                                            "Strength mod.", "Dexterity mod."],
+        this.addStat("Combat", "Combat Maneuver Defense", ["Base Attack Bonus", "Size mod",
+                                                            "Strength mod", "Dexterity mod"],
                     function (bab, sizemod, strmod, dexmod) {
                         return 10 - sizemod + bab + strmod + dexmod;
                     });
-        this.addStat("Combat", "Flat-Footed", ["Base Attack Bonus", "Size mod.",
-                                                 "Strength mod."],
+        this.addStat("Combat", "Flat-Footed", ["Base Attack Bonus", "Size mod",
+                                                 "Strength mod"],
                      function (bab, sizemod, strmod) {
                          return 10 + bab - sizemod + strmod;
                      });
-        this.addStat("Saving Throws", "Fortitude Save", ["Constitution mod."],
+        this.addStat("Saving Throws", "Fortitude Save", ["Constitution mod"],
                      function(conmod) {
                          return conmod;
                      });
-        this.addStat("Saving Throws", "Reflex Save", ["Dexterity mod."],
+        this.addStat("Saving Throws", "Reflex Save", ["Dexterity mod"],
                      function(dexmod) {
                          return dexmod;
                      });
-        this.addStat("Saving Throws", "Will Save", ["Wisdom mod."],
+        this.addStat("Saving Throws", "Will Save", ["Wisdom mod"],
                      function(wismod) {
                          return wismod;
                      });
@@ -125,6 +125,7 @@ var Character = Backbone.Collection.extend({
                          array.map(function (val) {
                              return collection.get(val).get("value");
                          })));
+                 stat.sync("update", stat);
              });
          });
 
